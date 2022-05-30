@@ -4,7 +4,7 @@ import tqdm
 import pyvisa
 import time
 from utils import Generator, Oscilloscope, to_dB
-
+from utils import frequency_sweep
 
 rm = pyvisa.ResourceManager()
 
@@ -14,18 +14,18 @@ oscilloscope = Oscilloscope(
 
 f_start = 10
 f_end = 100_000
-freqs = np.logspace(1, 5, 200)
-data_points = []
+steps = 1000
+data_points = np.zeros((1, 2))
 
-for freq in tqdm.tqdm(freqs):
+for freq in tqdm.tqdm(frequency_sweep(f_start, f_end, steps)):
     generator.set_freq(freq)
     oscilloscope.set_timebase(0.2 / freq)
-    time.sleep(1)
+    time.sleep(0.1)
     data = oscilloscope.get_data()
-    data_points.append((freq, max(data)))
+    data_points = np.concatenate((data_points, [[freq, np.max(data)]]))
 
-x = np.array([p[0] for p in data_points])
-y = np.array([p[1] for p in data_points])
+x = data_points[:, 0]
+y = data_points[:, 1]
 
 y = to_dB(y)
 
