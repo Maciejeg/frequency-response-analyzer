@@ -17,7 +17,7 @@ def test_thd():
     thd, x, y = calculate_thd(y, f, fs, ret_viz=True)
     assert thd == 0.06385402301549004, "THD calculation failed"
     assert (y >= 0).all(), "Negative FFT value"
-
+    return thd, x, y
 
 if __name__ == "__main__":
     test_thd()
