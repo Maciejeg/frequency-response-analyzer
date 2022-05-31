@@ -148,7 +148,7 @@ def calculate_thd_n(y, base_frequency, sampling_frequency, ret_viz=False):
     yfft = 2.0 / N * np.abs(yf[0:N // 2])
 
     thd_n = 0.0
-    reg = linear_model.LinearRegression().fit(xf.reshape(-1, 1), 1 / yfft)
+    reg = linear_model.Lasso(alpha=0.1).fit(xf.reshape(-1, 1), 1 / yfft)
     noise_level = 3 / reg.intercept_  # 3 - Hacky fix
 
     for frequency in np.arange(2 * base_frequency, np.max(xf), base_frequency):

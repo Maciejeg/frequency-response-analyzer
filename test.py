@@ -35,9 +35,9 @@ def test_thd_n():
     y += noise
 
     thd = calculate_thd(y, f, fs)
-    thd_n, x, y, n = calculate_thd_n(y, f, fs, True)
+    thd_n, x, y, n = calculate_thd_n(y, f, fs, ret_viz=True)
     assert thd == 0.06168333361611456, "THD calculation failed"
-    assert thd_n == 0.06292998187759988, "THD calculation failed"
+    assert thd_n == 0.06292999029070348, "THD+N calculation failed"
     assert (y >= 0).all(), "Negative FFT value"
     assert thd_n >= thd, "THD+N must be bigger or equal to THD"
 
