@@ -164,3 +164,19 @@ def calculate_thd_n(y, base_frequency, sampling_frequency, ret_viz=False):
         return thd_n, xf, yfft, noise_level
 
     return thd_n
+
+def analize(f_start, f_end, steps, generator, oscilloscope):
+    for freq in frequency_sweep(f_start, f_end, steps):
+        generator.set_freq(freq)
+        timebase = 0.5 / freq
+        oscilloscope.set_timebase(timebase)
+        sampling_frequency = 1000 / (timebase)
+
+        time.sleep(1)
+        data = oscilloscope.get_data()
+        data2 = oscilloscope.get_data(channel=2)
+        thd = calculate_thd(data, freq, sampling_frequency)
+        thd_n = calculate_thd_n(data, freq, sampling_frequency)
+        amplitude1 = max(data)
+        amplitude2 = max(data2)
+        yield freq, thd, thd_n, amplitude1, amplitude2
