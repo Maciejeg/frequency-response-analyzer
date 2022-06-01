@@ -13,7 +13,7 @@ class Device():
         print(self.identify())
 
     def identify(self):
-        return self.device.query("*IDN?")
+        return self.__class__.__name__ + " " + self.device.query("*IDN?")
 
     def read(self):
         status = -1
@@ -34,7 +34,7 @@ class Oscilloscope(Device):
         super().__init__(device)
 
     def set_timebase(self, timebase):
-        status = self.device.write("TIMebase:SCALe ".format(timebase))
+        status = self.device.write("TIMebase:SCALe {}".format(timebase))
         return status
 
     def get_data(self, channel=1):
@@ -111,7 +111,8 @@ def calculate_thd(y, base_frequency, sampling_frequency, ret_viz=False):
 
     thd = 0.0
 
-    for frequency in np.arange(2 * base_frequency, np.max(xf), base_frequency):
+    for frequency in np.arange(2 * base_frequency, 5 * base_frequency,
+                               base_frequency):
         closest_frequency_index = np.argmin(np.abs(xf - frequency))
         thd += np.power(yfft[closest_frequency_index], 2)
 
@@ -151,12 +152,14 @@ def calculate_thd_n(y, base_frequency, sampling_frequency, ret_viz=False):
     reg = linear_model.Lasso(alpha=0.1).fit(xf.reshape(-1, 1), 1 / yfft)
     noise_level = 3 / reg.intercept_  # 3 - Hacky fix
 
-    for frequency in np.arange(2 * base_frequency, np.max(xf), base_frequency):
+    for frequency in np.arange(2 * base_frequency, 5 * base_frequency,
+                               base_frequency):
         closest_frequency_index = np.argmin(np.abs(xf - frequency))
         thd_n += np.power(yfft[closest_frequency_index], 2)
 
     thd_n += np.power(noise_level, 2)
     thd_n = np.sqrt(thd_n)
+
     if ret_viz:
         return thd_n, xf, yfft, noise_level
 
