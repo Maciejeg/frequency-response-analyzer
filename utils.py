@@ -165,6 +165,7 @@ def calculate_thd_n(y, base_frequency, sampling_frequency, ret_viz=False):
 
     return thd_n
 
+
 def analize(f_start, f_end, steps, generator, oscilloscope):
     for freq in frequency_sweep(f_start, f_end, steps):
         generator.set_freq(freq)

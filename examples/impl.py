@@ -8,10 +8,11 @@ from utils import frequency_sweep
 from utils import calculate_thd, calculate_thd_n
 
 rm = pyvisa.ResourceManager()
+generator_address = 'GPIB0::4::INSTR'
+oscilloscope_address = 'TCPIP0::10.42.14.214::inst0::INSTR'
 
-generator = Generator(rm.open_resource('GPIB0::4::INSTR'))
-oscilloscope = Oscilloscope(
-    rm.open_resource('TCPIP0::10.42.14.214::inst0::INSTR'))
+generator = Generator(rm.open_resource(generator_address))
+oscilloscope = Oscilloscope(rm.open_resource(oscilloscope_address))
 
 f_start = 10
 f_end = 100_000
@@ -50,7 +51,7 @@ plt.plot(x, y, label='Amplifier')
 plt.plot(data_points2[:, 0], data_points2[:, 1], label='generator')
 plt.legend()
 plt.xscale('log')
-plt.ylim([-np.abs(4*max(y)), np.abs(4*max(y))])
+plt.ylim([-np.abs(4 * max(y)), np.abs(4 * max(y))])
 plt.xlabel("Frequency [Hz]")
 plt.ylabel("Gain [dB]")
 plt.title("Frequency response")
