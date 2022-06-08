@@ -29,14 +29,14 @@ for freq in tqdm.tqdm(frequency_sweep(f_start, f_end, steps)):
 
     time.sleep(1)
     data = oscilloscope.get_data()
-    data2 = oscilloscope.get_data(channel=2)
+    #data2 = oscilloscope.get_data(channel=2)
     thd.append(calculate_thd(data, freq, sampling_frequency))
     thd_n.append(calculate_thd_n(data, freq, sampling_frequency))
     data_points.append([freq, max(data)])
-    data_points2.append([freq, max(data2)])
+    #data_points2.append([freq, max(data2)])
 
 data_points = np.array(data_points)
-data_points2 = np.array(data_points2)
+#data_points2 = np.array(data_points2)
 
 x = data_points[:, 0]
 y = data_points[:, 1]
@@ -47,7 +47,7 @@ thd_n = to_dB(thd_n)
 plt.figure(figsize=(20, 10))
 plt.subplot(2, 1, 1)
 plt.plot(x, y, label='Amplifier')
-plt.plot(data_points2[:, 0], data_points2[:, 1], label='generator')
+#plt.plot(data_points2[:, 0], data_points2[:, 1], label='generator')
 plt.legend()
 plt.xscale('log')
 #plt.ylim([-np.abs(4*max(y)), np.abs(4*max(y))])
