@@ -79,6 +79,7 @@ def work(min_f, max_f, steps):
             plt.plot(freqs, to_dB([i / steps for i in thdns]), label='THD+N')
             plt.xscale('log')
             plt.ylabel("Gain [dB]")
+            plt.xlabel("Frequency [Hz]")
             plt.title("THD & THD+N")
             plt.grid(True, which="both", ls="-")
             plt.legend()
@@ -86,16 +87,19 @@ def work(min_f, max_f, steps):
             st.pyplot(fig, )
 
         with fig4:
-            st.markdown("### Porównanie")
+            st.markdown("### Wzmocnienie wzmacniacza")
             fig, _ = plt.subplots()
-            plt.plot(freqs, to_dB(amplitudes1), label='Amplifier')
-            plt.plot(freqs, to_dB(amplitudes2), label='Generator')
+            gain = [
+                a / (b + np.finfo(float).eps)
+                for a, b in zip(amplitudes1, amplitudes2)
+            ]
+            plt.plot(freqs, to_dB(gain), label='Gain')
             plt.legend()
-            plt.xlabel("Frequency [Hz]")
-            plt.ylabel("Gain [dB]")
             plt.title("Frequency response")
-            plt.grid(True, which="both", ls="-")
+            plt.xlabel("Frequency [Hz]")
             plt.xscale('log')
+            plt.ylabel("Gain [dB]")
+            plt.grid(True, which="both", ls="-")
             fig.savefig(path + "\\" + "amplifier_vs_generator.png")
             st.pyplot(fig)
 
