@@ -174,6 +174,7 @@ def analize(f_start, f_end, steps, generator, oscilloscope):
         sampling_frequency = 1000 / (timebase)
 
         time.sleep(1)
+
         amplifier_output = oscilloscope.get_data()
         generator_output = oscilloscope.get_data(channel=2)
         thd = calculate_thd(amplifier_output, freq, sampling_frequency)
